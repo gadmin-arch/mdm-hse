@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server"
 import { batchGetSheetValues, getCellValue } from "@/lib/google"
+import { NextResponse } from "next/server"
 
 // All ranges needed from the spreadsheet, grouped by sheet
 const RANGES = {
@@ -26,11 +26,11 @@ const RANGES = {
   totalHours: "Sheet9!D2:D",
 
   // Accident sheet – table column ranges
-  accidentDate: "Accident!A2:A",
-  accidentName: "Accident!B2:B",
-  accidentType: "Accident!C2:C",
-  accidentTimeLost: "Accident!D2:D",
-  accidentRemarks: "Accident!E2:E",
+  accidentDate: "Dashboard!B55:B65",
+  accidentName: "Dashboard!C55:C65",
+  accidentType: "Dashboard!D55:D65",
+  accidentTimeLost: "Dashboard!E55:E65",
+  accidentRemarks: "Dashboard!F55:F65",
 }
 
 function parseNumber(value: string): number {

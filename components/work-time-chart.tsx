@@ -3,11 +3,68 @@
 import {
   Area,
   AreaChart,
-  CartesianGrid,
   ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
 } from "recharts"
+
+interface MiniChartProps {
+  data: Array<{ label: string; value: number }>
+  color: string
+  gradientId: string
+}
+
+/**
+ * Reusable mini area chart with smooth monotone curves.
+ * Designed to be embedded inside stat cards.
+ */
+export function MiniAreaChart({ data, color, gradientId }: MiniChartProps) {
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <AreaChart data={data} margin={{ top: 4, right: 4, left: 4, bottom: 0 }}>
+        <defs>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity={0.4} />
+            <stop offset="95%" stopColor={color} stopOpacity={0.02} />
+          </linearGradient>
+        </defs>
+        <XAxis
+          dataKey="label"
+          tick={{ fill: "#94a3b8", fontSize: 10 }}
+          tickLine={false}
+          axisLine={false}
+          interval="preserveStartEnd"
+        />
+        <YAxis hide domain={["dataMin - 100", "dataMax + 200"]} />
+        <Tooltip
+          contentStyle={{
+            background: "rgba(7, 26, 48, 0.95)",
+            border: "1px solid rgba(100,150,220,0.2)",
+            borderRadius: "8px",
+            color: "#e2e8f0",
+            fontSize: "12px",
+            padding: "6px 10px",
+          }}
+          labelStyle={{ color: "#94a3b8", fontSize: "11px" }}
+          itemStyle={{ color }}
+          formatter={(value: number) => [value.toLocaleString(), ""]}
+        />
+        <Area
+          type="monotone"
+          dataKey="value"
+          stroke={color}
+          strokeWidth={2.5}
+          fill={`url(#${gradientId})`}
+          animationDuration={1200}
+          animationEasing="ease-out"
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  )
+}
+
+/* ── Legacy combined chart (kept for reference) ── */
 
 interface ChartDataPoint {
   week: string
@@ -21,7 +78,6 @@ interface WorkTimeChartProps {
 }
 
 export function WorkTimeChart({ data }: WorkTimeChartProps) {
-  // Transform data to match the chart's expected format
   const chartData = data.map((item) => ({
     week: item.week,
     work: item.workTime,
@@ -41,7 +97,6 @@ export function WorkTimeChart({ data }: WorkTimeChartProps) {
             <stop offset="100%" stopColor="#1f8a9e" stopOpacity={0.5} />
           </linearGradient>
         </defs>
-        <CartesianGrid stroke="#1c3a5e" vertical={false} />
         <XAxis
           dataKey="week"
           tick={{ fill: "#cbd5e1", fontSize: 12 }}
@@ -58,14 +113,14 @@ export function WorkTimeChart({ data }: WorkTimeChartProps) {
           width={48}
         />
         <Area
-          type="linear"
+          type="monotone"
           dataKey="total"
           stroke="#2aa9c0"
           strokeWidth={2}
           fill="url(#overtimeFill)"
         />
         <Area
-          type="linear"
+          type="monotone"
           dataKey="work"
           stroke="#e0b84e"
           strokeWidth={2}
