@@ -1,7 +1,7 @@
 "use client"
 
 import { MiniAreaChart } from "@/components/work-time-chart"
-import { format, parse, isValid } from "date-fns"
+import { format, isValid, parse } from "date-fns"
 import {
   ArrowDown,
   ArrowUp,
@@ -331,11 +331,11 @@ function DashboardLayout({
             </h1>
             <div className="flex items-center gap-3 text-base">
               <span className="rounded-md bg-[#13355f]/80 px-3 py-0.5 font-semibold text-amber-400">
-                {startDate || "N/A"}
+                {startDate ? formatDate(startDate) : "N/A"}
               </span>
               <span className="text-sm font-medium text-slate-400">TO</span>
               <span className="rounded-md bg-[#13355f]/80 px-3 py-0.5 font-semibold text-amber-400">
-                {endDate || "N/A"}
+                {endDate ? formatDate(endDate) : "N/A"}
               </span>
               <span className="mx-2 h-5 w-px bg-slate-600" />
               <div className="flex items-center gap-1.5">
@@ -473,10 +473,10 @@ function DashboardLayout({
                   <tr>
                     {(
                       [
-                        { field: "date" as SortField, label: "Date", width: "w-[120px]" },
+                        { field: "date" as SortField, label: "Date", width: "w-36" },
                         { field: "name" as SortField, label: "Name", width: "" },
-                        { field: "type" as SortField, label: "Type", width: "w-[140px]" },
-                        { field: "timeLost" as SortField, label: "Time Lost", width: "w-[100px]" },
+                        { field: "type" as SortField, label: "Type", width: "w-40" },
+                        { field: "timeLost" as SortField, label: "Time Lost", width: "w-32" },
                         { field: "remarks" as SortField, label: "Remarks", width: "" },
                       ] as const
                     ).map((col) => (
