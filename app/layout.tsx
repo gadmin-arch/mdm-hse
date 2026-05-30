@@ -39,8 +39,8 @@ export default function RootLayout({
     <html lang="en" className="bg-[#071a30]">
       <body className="font-sans antialiased">
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
-        {process.env.NODE_ENV === 'production' && <SpeedInsights />}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
