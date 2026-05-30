@@ -309,12 +309,34 @@ function DashboardLayout({
   ]
 
   return (
-    <main className="flex h-screen flex-col overflow-hidden bg-[#071a30] text-white">
+    <main className="flex h-screen flex-col bg-[#071a30] text-white overflow-hidden">
       {/* ════════ HEADER (fixed) ════════ */}
       <header className="shrink-0 px-4 pt-3 pb-2">
-        <div className="mx-auto flex max-w-[1800px] items-center gap-4">
-          {/* MDM Logo */}
-          <div className="relative h-20 w-56 shrink-0 overflow-hidden rounded-xl glass-card p-2">
+        <div className="mx-auto flex max-w-[1800px] flex-col md:flex-row items-center gap-3 md:gap-4">
+          {/* Mobile Logos Bar (shown only on mobile) */}
+          <div className="flex w-full justify-between items-center md:hidden mb-1">
+            <div className="relative h-10 w-28 overflow-hidden rounded-lg glass-card p-1">
+              <Image
+                src="/logo mdm new.png"
+                alt="MDM Logo"
+                fill
+                priority
+                className="object-contain p-1"
+              />
+            </div>
+            <div className="relative h-10 w-28 overflow-hidden rounded-lg glass-card p-1">
+              <Image
+                src="/logo k3.png"
+                alt="K3 Logo"
+                fill
+                priority
+                className="object-contain p-1"
+              />
+            </div>
+          </div>
+
+          {/* MDM Logo (hidden on mobile) */}
+          <div className="hidden md:block relative h-20 w-56 shrink-0 overflow-hidden rounded-xl glass-card p-2">
             <Image
               src="/logo mdm new.png"
               alt="MDM Logo"
@@ -326,35 +348,35 @@ function DashboardLayout({
 
           {/* Title + Date Range */}
           <div className="flex flex-1 flex-col items-center gap-1.5">
-            <h1 className="text-3xl font-extrabold tracking-tight lg:text-4xl">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-center">
               HSE PERFORMANCE DASHBOARD
             </h1>
-            <div className="flex items-center gap-3 text-base">
-              <span className="rounded-md bg-[#13355f]/80 px-3 py-0.5 font-semibold text-amber-400">
+            <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm md:text-base">
+              <span className="rounded-md bg-[#13355f]/80 px-2 py-0.5 md:px-3 md:py-0.5 font-semibold text-amber-400">
                 {startDate ? formatDate(startDate) : "N/A"}
               </span>
-              <span className="text-sm font-medium text-slate-400">TO</span>
-              <span className="rounded-md bg-[#13355f]/80 px-3 py-0.5 font-semibold text-amber-400">
+              <span className="text-xs font-medium text-slate-400">TO</span>
+              <span className="rounded-md bg-[#13355f]/80 px-2 py-0.5 md:px-3 md:py-0.5 font-semibold text-amber-400">
                 {endDate ? formatDate(endDate) : "N/A"}
               </span>
-              <span className="mx-2 h-5 w-px bg-slate-600" />
-              <div className="flex items-center gap-1.5">
-                <span className="size-2.5 rounded-full bg-amber-400" />
-                <span className="text-sm text-slate-300">
+              <span className="hidden sm:inline mx-1 h-4 w-px bg-slate-600" />
+              <div className="flex items-center gap-1 md:gap-1.5">
+                <span className="size-2 md:size-2.5 rounded-full bg-amber-400" />
+                <span className="text-slate-300">
                   Active <span className="font-bold text-white">{kpi.activePerson}</span>
                 </span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="size-2.5 rounded-full bg-emerald-400" />
-                <span className="text-sm text-slate-300">
+              <div className="flex items-center gap-1 md:gap-1.5">
+                <span className="size-2 md:size-2.5 rounded-full bg-emerald-400" />
+                <span className="text-slate-300">
                   Current <span className="font-bold text-emerald-400">{kpi.currentUsers}</span>
                 </span>
               </div>
             </div>
           </div>
 
-          {/* K3 Logo */}
-          <div className="relative h-20 w-56 shrink-0 overflow-hidden rounded-xl glass-card p-2">
+          {/* K3 Logo (hidden on mobile) */}
+          <div className="hidden md:block relative h-20 w-56 shrink-0 overflow-hidden rounded-xl glass-card p-2">
             <Image
               src="/logo k3.png"
               alt="K3 Logo"
@@ -367,10 +389,10 @@ function DashboardLayout({
       </header>
 
       {/* ════════ BODY (fills remaining space) ════════ */}
-      <div className="flex min-h-0 flex-1 flex-col gap-3 px-4 pb-2">
-        <div className="mx-auto flex w-full max-w-[1800px] min-h-0 flex-1 flex-col gap-3">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-2">
+        <div className="mx-auto flex w-full max-w-[1800px] flex-col gap-3">
           {/* ── Row 1: 3 Chart Cards ── */}
-          <div className="grid shrink-0 grid-cols-3 gap-3 stagger-children">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 shrink-0 stagger-children">
             <ChartCard
               title="TOTAL WORK TIME"
               value={kpi.totalHour.toLocaleString()}
@@ -407,13 +429,17 @@ function DashboardLayout({
           </div>
 
           {/* ── Row 2: Incident Stats (5 cards) ── */}
-          <div className="grid shrink-0 grid-cols-5 gap-3 stagger-children">
-            {incidentStats.map((s) => {
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 shrink-0 stagger-children">
+            {incidentStats.map((s, idx) => {
               const Icon = s.icon
               return (
                 <div
                   key={s.label}
-                  className={`flex items-center gap-3 rounded-xl bg-gradient-to-br ${s.bg} border ${s.borderColor} px-4 py-2.5 hover-lift glass-card animate-fade-in-up`}
+                  className={`flex items-center gap-3 rounded-xl bg-gradient-to-br ${s.bg} border ${
+                    s.borderColor
+                  } px-4 py-2.5 hover-lift glass-card animate-fade-in-up ${
+                    idx === 4 ? "col-span-2 md:col-span-1" : ""
+                  }`}
                 >
                   <div className={`rounded-lg bg-white/5 p-2 ${s.iconColor}`}>
                     <Icon className="size-5" />
@@ -430,23 +456,23 @@ function DashboardLayout({
           </div>
 
           {/* ── Row 3: Accident Table (fills remaining) ── */}
-          <div className="flex min-h-0 flex-1 flex-col rounded-xl glass-card-strong overflow-hidden">
+          <div className="flex flex-col rounded-xl glass-card-strong overflow-hidden">
             {/* Table header bar */}
-            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-slate-700/50 px-4 py-2.5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-700/50 px-4 py-2.5">
               <h2 className="text-sm font-bold uppercase tracking-wider text-slate-200">
                 Accident / Incident Log
               </h2>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
                 {/* Search */}
-                <div className="relative">
+                <div className="relative flex-1 sm:flex-none">
                   <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
                     placeholder="Search…"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-8 w-48 rounded-lg border border-slate-600/50 bg-[#071a30]/60 pl-8 pr-3 text-xs text-slate-200 placeholder:text-slate-500 outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/20 transition-colors"
+                    className="h-8 w-full sm:w-48 rounded-lg border border-slate-600/50 bg-[#071a30]/60 pl-8 pr-3 text-xs text-slate-200 placeholder:text-slate-500 outline-none focus:border-amber-400/50 focus:ring-1 focus:ring-amber-400/20 transition-colors"
                   />
                 </div>
 
@@ -454,7 +480,7 @@ function DashboardLayout({
                 <select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
-                  className="h-8 rounded-lg border border-slate-600/50 bg-[#071a30]/60 px-3 text-xs text-slate-200 outline-none focus:border-amber-400/50 cursor-pointer appearance-none"
+                  className="h-8 flex-1 sm:flex-none rounded-lg border border-slate-600/50 bg-[#071a30]/60 px-3 text-xs text-slate-200 outline-none focus:border-amber-400/50 cursor-pointer appearance-none"
                 >
                   <option value="">All Categories</option>
                   {categories.map((cat) => (
@@ -467,8 +493,8 @@ function DashboardLayout({
             </div>
 
             {/* Table */}
-            <div className="flex-1 overflow-auto dark-scrollbar">
-              <table className="w-full border-collapse text-left text-sm">
+            <div className="flex-1 overflow-x-auto overflow-y-visible dark-scrollbar">
+              <table className="w-full min-w-[800px] border-collapse text-left text-sm">
                 <thead className="sticky top-0 z-10 bg-[#0d2d52]">
                   <tr>
                     {(
@@ -538,11 +564,11 @@ function DashboardLayout({
 
       {/* ════════ FOOTER (fixed) ════════ */}
       <footer className="shrink-0 px-4 pb-3 pt-1">
-        <div className="mx-auto max-w-[1800px] rounded-xl glass-card py-3 text-center">
-          <p className="text-xl font-extrabold tracking-wide lg:text-2xl">
+        <div className="mx-auto max-w-[1800px] rounded-xl glass-card py-2.5 md:py-3 text-center">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold tracking-wide">
             KESELAMATAN ADALAH PRIORITAS KAMI
           </p>
-          <p className="mt-0.5 text-sm font-semibold italic text-slate-300">
+          <p className="mt-0.5 text-xs sm:text-sm font-semibold italic text-slate-300">
             {'"Safety is our priority"'}
           </p>
         </div>
